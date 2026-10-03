@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       DELCOM_BASEURL: JSON.stringify(
-        env.VITE_DELCOM_BASEURL || "https://open-api.delcom.org/api/v1"
+        env.DELCOM_BASEURL || env.VITE_DELCOM_BASEURL || "https://open-api.delcom.org/api/v1"
       ),
     },
     test: {
@@ -35,6 +35,12 @@ export default defineConfig(({ mode }) => {
           "**/*.test.{js,jsx}",
           "node_modules/**",
         ],
+        thresholds: {
+          lines: 100,
+          functions: 100,
+          branches: 100,
+          statements: 100,
+        },
       },
     },
   };
