@@ -335,13 +335,13 @@ function HomePage() {
                               Hilang
                             </span>
                           ) : (
-                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-600 text-white shadow-xs">
+                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-700 text-white shadow-xs">
                               Ditemukan
                             </span>
                           )}
 
                           {item.is_completed ? (
-                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-600 text-white shadow-xs">
+                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-700 text-white shadow-xs">
                               Selesai
                             </span>
                           ) : (
