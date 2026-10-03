@@ -72,9 +72,14 @@ export function renderWithProviders(
   {
     preloadedState = {},
     store = createMockStore(preloadedState),
+    route = "/",
     ...renderOptions
   } = {}
 ) {
+  if (route) {
+    window.history.pushState({}, "Test page", route);
+  }
+
   function Wrapper({ children }) {
     return (
       <Provider store={store}>
