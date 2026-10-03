@@ -3,36 +3,38 @@ import { useDispatch, useSelector } from "react-redux";
 import useInput from "../../../hooks/useInput";
 import { showErrorDialog } from "../../../helpers/toolsHelper";
 import {
-  asyncSetIsTodoAdd,
-  asyncSetTodos,
-  setIsTodoAddActionCreator,
-  setIsTodoAddedActionCreator,
+  asyncSetIsLostFoundAdd,
+  asyncSetLostFounds,
+  setIsLostFoundAddActionCreator,
+  setIsLostFoundAddedActionCreator,
 } from "../states/action";
 import { IconX, IconPlus, IconLoader2 } from "@tabler/icons-react";
 
 function AddModal({ show, onClose }) {
   const dispatch = useDispatch();
 
-  const isTodoAdd = useSelector((state) => state.isTodoAdd);
-  const isTodoAdded = useSelector((state) => state.isTodoAdded);
+  const isLostFoundAdd = useSelector((state) => state.isLostFoundAdd);
+  const isLostFoundAdded = useSelector((state) => state.isLostFoundAdded);
 
   const [loading, setLoading] = useState(false);
   const [title, changeTitle, setTitle] = useInput("");
   const [description, changeDescription, setDescription] = useInput("");
+  const [status, setStatus] = useState("lost");
 
   useEffect(() => {
-    if (isTodoAdd) {
+    if (isLostFoundAdd) {
       setLoading(false);
-      dispatch(setIsTodoAddActionCreator(false));
-      if (isTodoAdded) {
-        dispatch(setIsTodoAddedActionCreator(false));
-        dispatch(asyncSetTodos());
+      dispatch(setIsLostFoundAddActionCreator(false));
+      if (isLostFoundAdded) {
+        dispatch(setIsLostFoundAddedActionCreator(false));
+        dispatch(asyncSetLostFounds());
         setTitle("");
         setDescription("");
+        setStatus("lost");
         onClose();
       }
     }
-  }, [isTodoAdd, isTodoAdded, dispatch, onClose, setTitle, setDescription]);
+  }, [isLostFoundAdd, isLostFoundAdded, dispatch, onClose, setTitle, setDescription]);
 
   useEffect(() => {
     if (show) {
@@ -54,15 +56,26 @@ function AddModal({ show, onClose }) {
       return;
     }
 
+    if (!status) {
+      showErrorDialog("Status barang harus dipilih");
+      return;
+    }
+
     setLoading(true);
-    dispatch(asyncSetIsTodoAdd(title.trim(), description.trim()));
+    dispatch(
+      asyncSetIsLostFoundAdd({
+        title: title.trim(),
+        description: description.trim(),
+        status,
+      })
+    );
   }
 
   if (!show) return null;
 
   return (
     <div
-      data-testid="add-todo-modal"
+      data-testid="add-modal"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-200"
     >
       <div
@@ -74,7 +87,7 @@ function AddModal({ show, onClose }) {
             <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center">
               <IconPlus size={18} stroke={2.5} />
             </div>
-            <h3 className="text-base font-bold text-slate-800">Tambah Todo Baru</h3>
+            <h3 className="text-base font-bold text-slate-800">Tambah Laporan Barang</h3>
           </div>
           <button
             type="button"
@@ -86,17 +99,33 @@ function AddModal({ show, onClose }) {
           </button>
         </div>
 
-        <form onSubmit={handleSave} className="p-6 space-y-4">
+        <form data-testid="add-form" onSubmit={handleSave} className="p-6 space-y-4">
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-              Judul Todo <span className="text-red-500">*</span>
+              Jenis Laporan <span className="text-red-500">*</span>
+            </label>
+            <select
+              data-testid="add-status-select"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm"
+              required
+            >
+              <option value="lost">Barang Hilang (Lost)</option>
+              <option value="found">Barang Ditemukan (Found)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              Judul Barang <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              data-testid="add-todo-title-input"
+              data-testid="add-title-input"
               value={title}
               onChange={changeTitle}
-              placeholder="Contoh: Menyelesaikan Laporan Praktikum"
+              placeholder="Contoh: Dompet Kulit Hitam"
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm"
               required
             />
@@ -104,14 +133,14 @@ function AddModal({ show, onClose }) {
 
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-              Deskripsi <span className="text-red-500">*</span>
+              Deskripsi Lengkap <span className="text-red-500">*</span>
             </label>
             <textarea
-              data-testid="add-todo-description-input"
+              data-testid="add-description-input"
               value={description}
               onChange={changeDescription}
               rows={4}
-              placeholder="Tuliskan rincian tugas yang perlu diselesaikan..."
+              placeholder="Tuliskan ciri-ciri barang, lokasi hilang/ditemukan, dan info penting lainnya..."
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm resize-none"
               required
             />
@@ -141,7 +170,7 @@ function AddModal({ show, onClose }) {
               ) : (
                 <>
                   <IconPlus size={18} stroke={2.5} />
-                  <span>Tambah Todo</span>
+                  <span>Tambah Barang</span>
                 </>
               )}
             </button>

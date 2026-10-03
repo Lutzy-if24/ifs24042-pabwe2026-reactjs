@@ -2,51 +2,56 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { showErrorDialog } from "../../../helpers/toolsHelper";
 import {
-  asyncSetIsTodoChange,
-  asyncSetTodo,
-  asyncSetTodos,
-  setIsTodoChangeActionCreator,
-  setIsTodoChangedActionCreator,
+  asyncSetIsLostFoundChange,
+  asyncSetLostFound,
+  asyncSetLostFounds,
+  setIsLostFoundChangeActionCreator,
+  setIsLostFoundChangedActionCreator,
 } from "../states/action";
 import { IconX, IconEdit, IconLoader2 } from "@tabler/icons-react";
 
-function ChangeModal({ show, onClose, todoId }) {
+function ChangeModal({ show, onClose, lostFoundId }) {
   const dispatch = useDispatch();
 
-  const isTodoChange = useSelector((state) => state.isTodoChange);
-  const isTodoChanged = useSelector((state) => state.isTodoChanged);
-  const todo = useSelector((state) => state.todo);
+  const isLostFoundChange = useSelector((state) => state.isLostFoundChange);
+  const isLostFoundChanged = useSelector((state) => state.isLostFoundChanged);
+  const lostFound = useSelector((state) => state.lostFound);
 
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [isFinished, setIsFinished] = useState(false);
+  const [status, setStatus] = useState("lost");
+  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
-    if (todoId && show) {
-      dispatch(asyncSetTodo(todoId));
+    if (lostFoundId && show) {
+      dispatch(asyncSetLostFound(lostFoundId));
     }
-  }, [todoId, show, dispatch]);
+  }, [lostFoundId, show, dispatch]);
 
   useEffect(() => {
-    if (todo && show) {
-      setTitle(todo.title || "");
-      setDescription(todo.description || "");
-      setIsFinished(Boolean(todo.is_finished));
+    if (lostFound && show) {
+      setTitle(lostFound.title || "");
+      setDescription(lostFound.description || "");
+      setStatus(lostFound.status || "lost");
+      setIsCompleted(Boolean(lostFound.is_completed));
     }
-  }, [todo, show]);
+  }, [lostFound, show]);
 
   useEffect(() => {
-    if (isTodoChange) {
+    if (isLostFoundChange) {
       setLoading(false);
-      dispatch(setIsTodoChangeActionCreator(false));
-      if (isTodoChanged) {
-        dispatch(setIsTodoChangedActionCreator(false));
-        dispatch(asyncSetTodos());
+      dispatch(setIsLostFoundChangeActionCreator(false));
+      if (isLostFoundChanged) {
+        dispatch(setIsLostFoundChangedActionCreator(false));
+        dispatch(asyncSetLostFounds());
+        if (lostFoundId) {
+          dispatch(asyncSetLostFound(lostFoundId));
+        }
         onClose();
       }
     }
-  }, [isTodoChange, isTodoChanged, dispatch, onClose]);
+  }, [isLostFoundChange, isLostFoundChanged, lostFoundId, dispatch, onClose]);
 
   useEffect(() => {
     if (show) {
@@ -69,14 +74,14 @@ function ChangeModal({ show, onClose, todoId }) {
     }
 
     setLoading(true);
-    const finishedValue = isFinished ? 1 : 0;
+    const completedValue = isCompleted ? 1 : 0;
     dispatch(
-      asyncSetIsTodoChange(
-        todoId,
-        title.trim(),
-        description.trim(),
-        finishedValue
-      )
+      asyncSetIsLostFoundChange(lostFoundId, {
+        title: title.trim(),
+        description: description.trim(),
+        status,
+        is_completed: completedValue,
+      })
     );
   }
 
@@ -84,7 +89,7 @@ function ChangeModal({ show, onClose, todoId }) {
 
   return (
     <div
-      data-testid="edit-todo-modal"
+      data-testid="edit-modal"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-200"
     >
       <div
@@ -96,7 +101,7 @@ function ChangeModal({ show, onClose, todoId }) {
             <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
               <IconEdit size={18} stroke={2.5} />
             </div>
-            <h3 className="text-base font-bold text-slate-800">Ubah Data Todo</h3>
+            <h3 className="text-base font-bold text-slate-800">Ubah Data Laporan</h3>
           </div>
           <button
             type="button"
@@ -108,14 +113,30 @@ function ChangeModal({ show, onClose, todoId }) {
           </button>
         </div>
 
-        <form onSubmit={handleSave} className="p-6 space-y-4">
+        <form data-testid="edit-form" onSubmit={handleSave} className="p-6 space-y-4">
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-              Judul Todo <span className="text-red-500">*</span>
+              Jenis Laporan <span className="text-red-500">*</span>
+            </label>
+            <select
+              data-testid="edit-status-select"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm"
+              required
+            >
+              <option value="lost">Barang Hilang (Lost)</option>
+              <option value="found">Barang Ditemukan (Found)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              Judul Barang <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              data-testid="edit-todo-title-input"
+              data-testid="edit-title-input"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm"
@@ -125,25 +146,25 @@ function ChangeModal({ show, onClose, todoId }) {
 
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-              Status Penyelesaian
+              Status Penyelesaian (Selesai/Proses)
             </label>
             <select
-              data-testid="edit-todo-status-select"
-              value={isFinished ? "1" : "0"}
-              onChange={(e) => setIsFinished(e.target.value === "1")}
+              data-testid="edit-completed-select"
+              value={isCompleted ? "1" : "0"}
+              onChange={(e) => setIsCompleted(e.target.value === "1")}
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm"
             >
               <option value="0">Sedang Proses</option>
-              <option value="1">Sudah Selesai</option>
+              <option value="1">Selesai / Sudah Ditemukan / Ditutup</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-              Deskripsi <span className="text-red-500">*</span>
+              Deskripsi Lengkap <span className="text-red-500">*</span>
             </label>
             <textarea
-              data-testid="edit-todo-description-input"
+              data-testid="edit-description-input"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
@@ -176,7 +197,7 @@ function ChangeModal({ show, onClose, todoId }) {
               ) : (
                 <>
                   <IconEdit size={18} stroke={2.5} />
-                  <span>Perbarui Todo</span>
+                  <span>Perbarui Data</span>
                 </>
               )}
             </button>

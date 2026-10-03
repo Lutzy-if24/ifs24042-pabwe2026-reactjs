@@ -39,12 +39,12 @@ describe("apiHelper", () => {
     const mockFetch = vi.fn().mockResolvedValue({ status: 200 });
     global.fetch = mockFetch;
 
-    await apiHelper.fetchData("http://localhost:8765/api/v1/todos?is_finished=1", {
+    await apiHelper.fetchData("http://localhost:8765/api/v1/lost-founds?status=lost", {
       method: "GET",
     });
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "http://localhost:8765/api/v1/todos?is_finished=1",
+      "http://localhost:8765/api/v1/lost-founds?status=lost",
       expect.objectContaining({
         method: "GET",
         headers: {},

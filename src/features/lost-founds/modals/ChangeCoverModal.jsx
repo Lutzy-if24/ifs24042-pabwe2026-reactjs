@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { showErrorDialog } from "../../../helpers/toolsHelper";
 import {
-  asyncSetIsTodoChangeCover,
-  asyncSetTodo,
-  setIsTodoChangeCoverActionCreator,
-  setIsTodoChangedCoverActionCreator,
+  asyncSetIsLostFoundChangeCover,
+  asyncSetLostFound,
+  setIsLostFoundChangeCoverActionCreator,
+  setIsLostFoundChangedCoverActionCreator,
 } from "../states/action";
 import { IconX, IconPhotoUp, IconLoader2, IconUpload } from "@tabler/icons-react";
 
-function ChangeCoverModal({ show, onClose, todo }) {
+function ChangeCoverModal({ show, onClose, lostFound }) {
   const dispatch = useDispatch();
 
-  const isTodoChangeCover = useSelector((state) => state.isTodoChangeCover);
-  const isTodoChangedCover = useSelector((state) => state.isTodoChangedCover);
+  const isLostFoundChangeCover = useSelector(
+    (state) => state.isLostFoundChangeCover
+  );
+  const isLostFoundChangedCover = useSelector(
+    (state) => state.isLostFoundChangedCover
+  );
 
   const [loading, setLoading] = useState(false);
   const [fileCover, setFileCover] = useState(null);
@@ -30,16 +34,18 @@ function ChangeCoverModal({ show, onClose, todo }) {
   }, [show]);
 
   useEffect(() => {
-    if (isTodoChangeCover) {
-      dispatch(setIsTodoChangeCoverActionCreator(false));
+    if (isLostFoundChangeCover) {
+      dispatch(setIsLostFoundChangeCoverActionCreator(false));
       setLoading(false);
-      if (isTodoChangedCover) {
-        dispatch(setIsTodoChangedCoverActionCreator(false));
-        dispatch(asyncSetTodo(todo?.id));
+      if (isLostFoundChangedCover) {
+        dispatch(setIsLostFoundChangedCoverActionCreator(false));
+        if (lostFound?.id) {
+          dispatch(asyncSetLostFound(lostFound.id));
+        }
         onClose();
       }
     }
-  }, [isTodoChangeCover, isTodoChangedCover, dispatch, onClose, todo]);
+  }, [isLostFoundChangeCover, isLostFoundChangedCover, dispatch, onClose, lostFound]);
 
   function handleFileChange(e) {
     const file = e.target.files?.[0];
@@ -49,9 +55,9 @@ function ChangeCoverModal({ show, onClose, todo }) {
         showErrorDialog("Hanya file JPEG, JPG, atau PNG yang diperbolehkan!");
         return;
       }
-      const MAX_FILE_SIZE = 1024 * 1024; // 1MB sesuai batas server
+      const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
       if (file.size > MAX_FILE_SIZE) {
-        showErrorDialog("Ukuran file terlalu besar. Maksimal 1MB!");
+        showErrorDialog("Ukuran file terlalu besar. Maksimal 2MB!");
         return;
       }
       setFileCover(file);
@@ -67,10 +73,10 @@ function ChangeCoverModal({ show, onClose, todo }) {
     }
 
     setLoading(true);
-    dispatch(asyncSetIsTodoChangeCover(todo.id, fileCover));
+    dispatch(asyncSetIsLostFoundChangeCover(lostFound.id, fileCover));
   }
 
-  if (!show || !todo) return null;
+  if (!show || !lostFound) return null;
 
   return (
     <div
@@ -86,7 +92,7 @@ function ChangeCoverModal({ show, onClose, todo }) {
             <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center">
               <IconPhotoUp size={18} stroke={2.5} />
             </div>
-            <h3 className="text-base font-bold text-slate-800">Ubah Cover Todo</h3>
+            <h3 className="text-base font-bold text-slate-800">Ubah Cover Barang</h3>
           </div>
           <button
             type="button"
@@ -116,9 +122,9 @@ function ChangeCoverModal({ show, onClose, todo }) {
                     <IconUpload size={20} />
                   </div>
                   <p className="text-sm font-semibold text-slate-700">
-                    Klik untuk memilih foto
+                    Klik untuk memilih foto cover
                   </p>
-                  <p className="text-xs text-slate-500 mt-1">PNG, JPG, JPEG (Max. 1MB)</p>
+                  <p className="text-xs text-slate-500 mt-1">PNG, JPG, JPEG (Max. 2MB)</p>
                 </div>
               )}
               <input

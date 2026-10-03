@@ -7,7 +7,7 @@ import { asyncSetIsAuthLogout, setIsAuthLogoutActionCreator } from "../../auth/s
 import NavbarComponent from "../components/NavbarComponent";
 import SidebarComponent from "../components/SidebarComponent";
 
-function TodoLayout() {
+function LostFoundLayout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ function TodoLayout() {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // 1. Jalankan sekali untuk mengecek apakah pengguna sudah login
+  // 1. Check if token exists on mount
   useEffect(() => {
     const authToken = apiHelper.getAccessToken();
     if (authToken) {
@@ -27,7 +27,7 @@ function TodoLayout() {
     }
   }, [dispatch, navigate]);
 
-  // 2. Jika proses pengambilan profil selesai dan tidak ada profile, arahkan ke login
+  // 2. If profile checking done and profile is missing, clear token and redirect
   useEffect(() => {
     if (isProfile) {
       dispatch(setIsProfile(false));
@@ -38,7 +38,7 @@ function TodoLayout() {
     }
   }, [isProfile, profile, dispatch, navigate]);
 
-  // 3. Efek setelah logout
+  // 3. Effect after logout
   useEffect(() => {
     if (isAuthLogout) {
       dispatch(setIsAuthLogoutActionCreator(false));
@@ -84,4 +84,4 @@ function TodoLayout() {
   );
 }
 
-export default TodoLayout;
+export default LostFoundLayout;

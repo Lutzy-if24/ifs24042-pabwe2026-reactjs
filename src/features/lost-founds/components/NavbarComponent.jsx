@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getImageUrl } from "../../../helpers/toolsHelper";
 import {
-  IconChecklist,
+  IconSearch,
   IconUser,
   IconLogout,
   IconChevronDown,
@@ -40,11 +41,11 @@ function NavbarComponent({ profile, handleLogout, onToggleSidebar, isSidebarOpen
 
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-              <IconChecklist size={22} stroke={2.5} />
+              <IconSearch size={22} stroke={2.5} />
             </div>
             <div>
               <span className="text-lg font-bold bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-800 bg-clip-text text-transparent">
-                Delcom Todo
+                Lost & Found
               </span>
             </div>
           </Link>
@@ -60,7 +61,7 @@ function NavbarComponent({ profile, handleLogout, onToggleSidebar, isSidebarOpen
           >
             {profile?.photo ? (
               <img
-                src={profile.photo}
+                src={getImageUrl(profile.photo)}
                 alt={profile.name}
                 className="w-8 h-8 rounded-full object-cover border border-slate-200"
               />

@@ -14,18 +14,19 @@ import {
   isChangeProfilePasswordReducer,
 } from "./features/users/states/reducer";
 import {
-  todosReducer,
-  todoReducer,
-  isTodoReducer,
-  isTodoAddReducer,
-  isTodoAddedReducer,
-  isTodoChangeReducer,
-  isTodoChangedReducer,
-  isTodoChangeCoverReducer,
-  isTodoChangedCoverReducer,
-  isTodoDeleteReducer,
-  isTodoDeletedReducer,
-} from "./features/todos/states/reducer";
+  lostFoundsReducer,
+  lostFoundReducer,
+  isLostFoundReducer,
+  isLostFoundAddReducer,
+  isLostFoundAddedReducer,
+  isLostFoundChangeReducer,
+  isLostFoundChangedReducer,
+  isLostFoundChangeCoverReducer,
+  isLostFoundChangedCoverReducer,
+  isLostFoundDeleteReducer,
+  isLostFoundDeletedReducer,
+  lostFoundStatsReducer,
+} from "./features/lost-founds/states/reducer";
 
 const store = configureStore({
   reducer: {
@@ -43,18 +44,19 @@ const store = configureStore({
     isChangeProfilePhoto: isChangeProfilePhotoReducer,
     isChangeProfilePassword: isChangeProfilePasswordReducer,
 
-    // Todos reducers
-    todos: todosReducer,
-    todo: todoReducer,
-    isTodo: isTodoReducer,
-    isTodoAdd: isTodoAddReducer,
-    isTodoAdded: isTodoAddedReducer,
-    isTodoChange: isTodoChangeReducer,
-    isTodoChanged: isTodoChangedReducer,
-    isTodoChangeCover: isTodoChangeCoverReducer,
-    isTodoChangedCover: isTodoChangedCoverReducer,
-    isTodoDelete: isTodoDeleteReducer,
-    isTodoDeleted: isTodoDeletedReducer,
+    // Lost & Founds reducers
+    lostFounds: lostFoundsReducer,
+    lostFound: lostFoundReducer,
+    isLostFound: isLostFoundReducer,
+    isLostFoundAdd: isLostFoundAddReducer,
+    isLostFoundAdded: isLostFoundAddedReducer,
+    isLostFoundChange: isLostFoundChangeReducer,
+    isLostFoundChanged: isLostFoundChangedReducer,
+    isLostFoundChangeCover: isLostFoundChangeCoverReducer,
+    isLostFoundChangedCover: isLostFoundChangedCoverReducer,
+    isLostFoundDelete: isLostFoundDeleteReducer,
+    isLostFoundDeleted: isLostFoundDeletedReducer,
+    lostFoundStats: lostFoundStatsReducer,
   },
 });
 

@@ -1,13 +1,12 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import LoginPage from "./features/auth/pages/LoginPage";
 import AuthLayout from "./features/auth/layouts/AuthLayout";
 import RegisterPage from "./features/auth/pages/RegisterPage";
-import HomePage from "./features/todos/pages/HomePage";
-import DetailPage from "./features/todos/pages/DetailPage";
+import HomePage from "./features/lost-founds/pages/HomePage";
+import DetailPage from "./features/lost-founds/pages/DetailPage";
 import UsersPage from "./features/users/pages/UsersPage";
 import ProfilePage from "./features/users/pages/ProfilePage";
-import TodoLayout from "./features/todos/layouts/TodoLayout";
-import NotFoundPage from "./features/common/pages/NotFoundPage";
+import LostFoundLayout from "./features/lost-founds/layouts/LostFoundLayout";
 
 function App() {
   return (
@@ -19,15 +18,15 @@ function App() {
       </Route>
 
       {/* Dashboard routes */}
-      <Route path="/" element={<TodoLayout />}>
+      <Route path="/" element={<LostFoundLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="todos/:todoId" element={<DetailPage />} />
+        <Route path="lost-founds/:id" element={<DetailPage />} />
         <Route path="users" element={<UsersPage />} />
         <Route path="profile" element={<ProfilePage />} />
       </Route>
 
-      {/* 404 Route */}
-      <Route path="*" element={<NotFoundPage />} />
+      {/* Catch-all Route */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
