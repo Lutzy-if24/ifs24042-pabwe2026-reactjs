@@ -1,5 +1,6 @@
 import { screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { Routes, Route } from "react-router-dom";
 import DetailPage from "./DetailPage";
 import { renderWithProviders } from "../../../test-utils";
 import * as toolsHelper from "../../../helpers/toolsHelper";
@@ -94,6 +95,22 @@ describe("DetailPage", () => {
 
     fireEvent.click(screen.getByTestId("edit-detail-btn"));
     expect(screen.getByTestId("edit-modal")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("close-edit-modal-btn"));
+  });
+
+  it("dispatches asyncSetLostFound when id param is present", () => {
+    window.history.pushState({}, "", "/lost-founds/8");
+    renderWithProviders(
+      <Routes>
+        <Route path="/lost-founds/:id" element={<DetailPage />} />
+      </Routes>,
+      {
+        preloadedState: {
+          profile: mockProfile,
+          lostFound: mockLostFoundOwner,
+        },
+      }
+    );
   });
 
   it("handles delete action after confirm", async () => {
@@ -136,5 +153,49 @@ describe("DetailPage", () => {
     });
 
     expect(screen.getByText("HP Samsung")).toBeInTheDocument();
+  });
+
+  it("renders status lost, is_completed 1, missing author info, and missing description", () => {
+    const itemLost = {
+      id: 88,
+      user_id: 2,
+      title: "Barang Hilang 88",
+      description: null,
+      status: "lost",
+      is_completed: 1,
+      author: null,
+    };
+
+    renderWithProviders(<DetailPage />, {
+      preloadedState: {
+        profile: mockProfile,
+        lostFound: itemLost,
+      },
+    });
+
+    expect(screen.getByText("Barang Hilang")).toBeInTheDocument();
+    expect(screen.getByText("Selesai")).toBeInTheDocument();
+    expect(screen.getByText("Pengguna Anonim")).toBeInTheDocument();
+    expect(screen.getByText("U")).toBeInTheDocument();
+    expect(
+      screen.getByText("Tidak ada deskripsi rincian untuk barang ini.")
+    ).toBeInTheDocument();
+  });
+
+  it("does not delete item if confirm dialog is canceled", async () => {
+    toolsHelper.showConfirmDialog.mockResolvedValue({ isConfirmed: false });
+    const deleteSpy = vi.spyOn(lostFoundApi, "deleteLostFound");
+
+    renderWithProviders(<DetailPage />, {
+      preloadedState: {
+        profile: mockProfile,
+        lostFound: mockLostFoundOwner,
+      },
+      route: "/lost-founds/8",
+    });
+
+    fireEvent.click(screen.getByTestId("delete-detail-btn"));
+    expect(toolsHelper.showConfirmDialog).toHaveBeenCalled();
+    expect(deleteSpy).not.toHaveBeenCalled();
   });
 });

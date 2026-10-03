@@ -72,4 +72,20 @@ describe("AddModal", () => {
 
     expect(onClose).toHaveBeenCalled();
   });
+
+  it("validates empty status selection", () => {
+    renderWithProviders(<AddModal show={true} onClose={vi.fn()} />);
+
+    const titleInput = screen.getByTestId("add-title-input");
+    const descInput = screen.getByTestId("add-description-input");
+    const statusSelect = screen.getByTestId("add-status-select");
+    const form = screen.getByTestId("add-form");
+
+    fireEvent.change(titleInput, { target: { value: "Judul Barang" } });
+    fireEvent.change(descInput, { target: { value: "Deskripsi Barang" } });
+    fireEvent.change(statusSelect, { target: { value: "" } });
+
+    fireEvent.submit(form);
+    expect(toolsHelper.showErrorDialog).toHaveBeenCalledWith("Status barang harus dipilih");
+  });
 });

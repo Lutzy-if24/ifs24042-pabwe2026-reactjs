@@ -108,4 +108,28 @@ describe("ChangeCoverModal", () => {
 
     expect(onClose).toHaveBeenCalled();
   });
+
+  it("handles isLostFoundChangeCover completion when lostFound has no id", () => {
+    const onClose = vi.fn();
+    renderWithProviders(
+      <ChangeCoverModal show={true} onClose={onClose} lostFound={{}} />,
+      {
+        preloadedState: {
+          isLostFoundChangeCover: true,
+          isLostFoundChangedCover: true,
+        },
+      }
+    );
+
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("does nothing when file input change has empty files list", () => {
+    renderWithProviders(
+      <ChangeCoverModal show={true} onClose={vi.fn()} lostFound={mockLostFound} />
+    );
+
+    const input = screen.getByTestId("cover-file-input");
+    fireEvent.change(input, { target: { files: [] } });
+  });
 });

@@ -253,6 +253,25 @@ describe("userApi", () => {
       expect(fetchDataSpy).toHaveBeenCalledTimes(2);
     });
 
+    it("should fallback confirmation to newPassword in 404 fallback route when confirmation omitted", async () => {
+      const fetchDataSpy = vi.spyOn(apiHelper, "fetchData")
+        .mockResolvedValueOnce({
+          status: 404,
+          json: async () => ({ status: "fail", message: "Not found" }),
+        })
+        .mockResolvedValueOnce({
+          status: 200,
+          json: async () => ({
+            status: "success",
+            message: "Berhasil mengubah kata sandi lewat fallback",
+          }),
+        });
+
+      const msg = await userApi.putProfilePassword("old123", "new123");
+      expect(msg).toBe("Berhasil mengubah kata sandi lewat fallback");
+      expect(fetchDataSpy).toHaveBeenCalledTimes(2);
+    });
+
     it("should fallback confirmation to newPassword when confirmation omitted", async () => {
       vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
         status: 200,

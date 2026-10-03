@@ -109,4 +109,40 @@ describe("NavbarComponent", () => {
     fireEvent.click(toggleBtn);
     expect(onToggleSidebar).toHaveBeenCalled();
   });
+
+  it("renders default fallback text when profile is missing or empty", () => {
+    render(
+      <BrowserRouter>
+        <NavbarComponent
+          profile={null}
+          handleLogout={vi.fn()}
+          onToggleSidebar={vi.fn()}
+          isSidebarOpen={false}
+        />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText("U")).toBeInTheDocument();
+    expect(screen.getByText("Pengguna")).toBeInTheDocument();
+  });
+
+  it("does not close dropdown when clicking inside dropdown container", () => {
+    render(
+      <BrowserRouter>
+        <NavbarComponent
+          profile={mockProfile}
+          handleLogout={vi.fn()}
+          onToggleSidebar={vi.fn()}
+          isSidebarOpen={false}
+        />
+      </BrowserRouter>
+    );
+
+    const dropdownBtn = screen.getByTestId("profile-dropdown-button");
+    fireEvent.click(dropdownBtn);
+    expect(screen.getByTestId("profile-dropdown-menu")).toBeInTheDocument();
+
+    fireEvent.mouseDown(dropdownBtn);
+    expect(screen.getByTestId("profile-dropdown-menu")).toBeInTheDocument();
+  });
 });

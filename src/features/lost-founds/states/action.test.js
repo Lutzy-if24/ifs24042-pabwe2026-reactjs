@@ -116,6 +116,19 @@ describe("lost-founds action creators and thunks", () => {
       expect(dispatch).toHaveBeenCalledWith(setIsLostFoundAddedActionCreator(false));
       expect(dispatch).toHaveBeenCalledWith(setIsLostFoundAddActionCreator(false));
     });
+
+    it("should use default success message when API returns no message on add", async () => {
+      vi.spyOn(lostFoundApi, "postLostFound").mockResolvedValue(undefined);
+      const dispatch = vi.fn();
+
+      await asyncSetIsLostFoundAdd({
+        title: "Key",
+        description: "Found",
+        status: "found",
+      })(dispatch);
+
+      expect(toolsHelper.showSuccessDialog).toHaveBeenCalledWith("Barang berhasil ditambahkan!");
+    });
   });
 
   describe("asyncSetIsLostFoundChange", () => {
@@ -135,6 +148,20 @@ describe("lost-founds action creators and thunks", () => {
       expect(toolsHelper.showSuccessDialog).toHaveBeenCalledWith("Updated");
       expect(dispatch).toHaveBeenCalledWith(setIsLostFoundChangedActionCreator(true));
       expect(dispatch).toHaveBeenCalledWith(setIsLostFoundChangeActionCreator(false));
+    });
+
+    it("should use default success message when API returns no message on change", async () => {
+      vi.spyOn(lostFoundApi, "putLostFound").mockResolvedValue(undefined);
+      const dispatch = vi.fn();
+
+      await asyncSetIsLostFoundChange(5, {
+        title: "Title",
+        description: "Desc",
+        status: "lost",
+        is_completed: 1,
+      })(dispatch);
+
+      expect(toolsHelper.showSuccessDialog).toHaveBeenCalledWith("Barang berhasil diperbarui!");
     });
 
     it("should handle error during update flow", async () => {
@@ -169,6 +196,16 @@ describe("lost-founds action creators and thunks", () => {
       expect(dispatch).toHaveBeenCalledWith(setIsLostFoundChangeCoverActionCreator(false));
     });
 
+    it("should use default success message when API returns no message on cover upload", async () => {
+      vi.spyOn(lostFoundApi, "postLostFoundCover").mockResolvedValue(undefined);
+      const dispatch = vi.fn();
+      const file = new File(["dummy"], "c.png");
+
+      await asyncSetIsLostFoundChangeCover(5, file)(dispatch);
+
+      expect(toolsHelper.showSuccessDialog).toHaveBeenCalledWith("Cover berhasil diperbarui!");
+    });
+
     it("should handle cover upload error", async () => {
       vi.spyOn(lostFoundApi, "postLostFoundCover").mockRejectedValue(new Error("Upload Error"));
       const dispatch = vi.fn();
@@ -194,6 +231,15 @@ describe("lost-founds action creators and thunks", () => {
       expect(toolsHelper.showSuccessDialog).toHaveBeenCalledWith("Deleted");
       expect(dispatch).toHaveBeenCalledWith(setIsLostFoundDeletedActionCreator(true));
       expect(dispatch).toHaveBeenCalledWith(setIsLostFoundDeleteActionCreator(false));
+    });
+
+    it("should use default success message when API returns no message on delete", async () => {
+      vi.spyOn(lostFoundApi, "deleteLostFound").mockResolvedValue(undefined);
+      const dispatch = vi.fn();
+
+      await asyncSetIsLostFoundDelete(3)(dispatch);
+
+      expect(toolsHelper.showSuccessDialog).toHaveBeenCalledWith("Barang berhasil dihapus!");
     });
 
     it("should handle delete error", async () => {

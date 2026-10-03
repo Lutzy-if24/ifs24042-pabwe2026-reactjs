@@ -79,6 +79,43 @@ describe("lostFoundApi", () => {
         "Gagal mengambil daftar barang"
       );
     });
+
+    it("should throw error using default message and error details when result.message is empty", async () => {
+      vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
+        json: async () => ({
+          status: "fail",
+          message: "",
+          data: { field: ["Error detail"] },
+        }),
+      });
+
+      await expect(lostFoundApi.getLostFounds()).rejects.toThrow(
+        "Gagal mengambil daftar barang: Error detail"
+      );
+    });
+
+    it("should throw error with message when data is empty object or not an object", async () => {
+      vi.spyOn(apiHelper, "fetchData").mockResolvedValueOnce({
+        json: async () => ({
+          status: "fail",
+          message: "Failure with empty data object",
+          data: {},
+        }),
+      }).mockResolvedValueOnce({
+        json: async () => ({
+          status: "fail",
+          message: "Failure with string data",
+          data: "not-an-object",
+        }),
+      });
+
+      await expect(lostFoundApi.getLostFounds()).rejects.toThrow(
+        "Failure with empty data object"
+      );
+      await expect(lostFoundApi.getLostFounds()).rejects.toThrow(
+        "Failure with string data"
+      );
+    });
   });
 
   describe("getLostFoundById", () => {

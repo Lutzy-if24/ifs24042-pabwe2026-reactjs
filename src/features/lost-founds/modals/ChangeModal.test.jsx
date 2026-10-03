@@ -71,6 +71,9 @@ describe("ChangeModal", () => {
       },
     });
 
+    const statusSelect = screen.getByTestId("edit-status-select");
+    fireEvent.change(statusSelect, { target: { value: "found" } });
+
     const completedSelect = screen.getByTestId("edit-completed-select");
     fireEvent.change(completedSelect, { target: { value: "1" } });
 
@@ -101,5 +104,34 @@ describe("ChangeModal", () => {
     });
 
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it("handles isLostFoundChange state completion when lostFoundId is null", () => {
+    const onClose = vi.fn();
+    renderWithProviders(<ChangeModal show={true} onClose={onClose} lostFoundId={null} />, {
+      preloadedState: {
+        isLostFoundChange: true,
+        isLostFoundChanged: true,
+      },
+    });
+
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("populates inputs with fallbacks when lostFound fields are null and submits with is_completed 0", () => {
+    renderWithProviders(<ChangeModal show={true} onClose={vi.fn()} lostFoundId={1} />, {
+      preloadedState: {
+        lostFound: { title: null, description: null, status: null, is_completed: 0 },
+      },
+    });
+
+    const titleInput = screen.getByTestId("edit-title-input");
+    const descInput = screen.getByTestId("edit-description-input");
+    const form = screen.getByTestId("edit-form");
+
+    fireEvent.change(titleInput, { target: { value: "Judul Baru" } });
+    fireEvent.change(descInput, { target: { value: "Deskripsi Baru" } });
+
+    fireEvent.submit(form);
   });
 });

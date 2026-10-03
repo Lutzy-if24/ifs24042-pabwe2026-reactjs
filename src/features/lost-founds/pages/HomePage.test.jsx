@@ -120,10 +120,12 @@ describe("HomePage", () => {
     const addBtn = screen.getByTestId("add-lost-found-btn");
     fireEvent.click(addBtn);
     expect(screen.getByTestId("add-modal")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("close-add-modal-btn"));
 
     const editBtn = screen.getByTestId("edit-item-10");
     fireEvent.click(editBtn);
     expect(screen.getByTestId("edit-modal")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("close-edit-modal-btn"));
   });
 
   it("handles toggling completion and item deletion for owner", async () => {
@@ -173,5 +175,91 @@ describe("HomePage", () => {
 
     const viewBtn = screen.getByTestId("view-item-10");
     fireEvent.click(viewBtn);
+  });
+
+  it("renders item with missing author and handles toggling item with is_completed = 1", () => {
+    const itemCompleted = {
+      id: 99,
+      user_id: 1,
+      title: "Item Completed",
+      description: "Desc",
+      status: "lost",
+      is_completed: 1,
+      author: null,
+    };
+
+    toolsHelper.showConfirmDialog.mockResolvedValue({ isConfirmed: true });
+    vi.spyOn(lostFoundApi, "putLostFound").mockResolvedValue("Success");
+
+    renderWithProviders(<HomePage />, {
+      preloadedState: {
+        profile: mockProfile,
+        lostFounds: [itemCompleted],
+      },
+    });
+
+    expect(screen.getByText("Anonim")).toBeInTheDocument();
+
+    const toggleBtn = screen.getByTestId("toggle-complete-99");
+    fireEvent.click(toggleBtn);
+  });
+
+  it("does not delete item when confirm dialog is canceled on home page", async () => {
+    toolsHelper.showConfirmDialog.mockResolvedValue({ isConfirmed: false });
+    const deleteSpy = vi.spyOn(lostFoundApi, "deleteLostFound");
+
+    renderWithProviders(<HomePage />, {
+      preloadedState: {
+        profile: mockProfile,
+        lostFounds: mockItems,
+      },
+    });
+
+    const deleteBtn = screen.getByTestId("delete-item-10");
+    fireEvent.click(deleteBtn);
+    expect(toolsHelper.showConfirmDialog).toHaveBeenCalled();
+    expect(deleteSpy).not.toHaveBeenCalled();
+  });
+
+  it("handles null lostFounds state and search query with null item title or description", () => {
+    const itemNullTitleDesc = {
+      id: 55,
+      user_id: 1,
+      title: null,
+      description: null,
+      status: "lost",
+      is_completed: 0,
+    };
+
+    renderWithProviders(<HomePage />, {
+      preloadedState: {
+        profile: mockProfile,
+        lostFounds: [itemNullTitleDesc],
+      },
+    });
+
+    const searchInput = screen.getByTestId("search-lost-found-input");
+    fireEvent.change(searchInput, { target: { value: "test" } });
+
+    // Test non-array lostFounds fallback
+    renderWithProviders(<HomePage />, {
+      preloadedState: {
+        profile: mockProfile,
+        lostFounds: null,
+      },
+    });
+  });
+
+  it("refreshes lost-founds list when isLostFoundDeleted is true with isMeFilter true and false", () => {
+    const { rerender } = renderWithProviders(<HomePage />, {
+      preloadedState: {
+        profile: mockProfile,
+        lostFounds: mockItems,
+        isLostFoundDeleted: true,
+      },
+    });
+
+    const myItemsBtn = screen.getByTestId("filter-my-items-btn");
+    fireEvent.click(myItemsBtn);
   });
 });

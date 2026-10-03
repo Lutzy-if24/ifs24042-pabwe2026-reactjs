@@ -22,23 +22,27 @@ describe("App Routing", () => {
   });
 
   it("redirects unauthenticated user from home route to login page", () => {
+    window.history.pushState({}, 'Test page', '/');
     vi.spyOn(apiHelper, "getAccessToken").mockReturnValue(null);
 
-    renderWithProviders(<App />, { route: "/" });
+    renderWithProviders(<App />);
     expect(screen.getByTestId("login-form")).toBeInTheDocument();
   });
 
   it("renders login page on /auth/login", () => {
-    renderWithProviders(<App />, { route: "/auth/login" });
+    window.history.pushState({}, 'Test page', '/auth/login');
+    renderWithProviders(<App />);
     expect(screen.getByTestId("login-form")).toBeInTheDocument();
   });
 
   it("renders register page on /auth/register", () => {
-    renderWithProviders(<App />, { route: "/auth/register" });
+    window.history.pushState({}, 'Test page', '/auth/register');
+    renderWithProviders(<App />);
     expect(screen.getByTestId("register-form")).toBeInTheDocument();
   });
 
   it("renders dashboard on authenticated / route", async () => {
+    window.history.pushState({}, 'Test page', '/');
     vi.spyOn(apiHelper, "getAccessToken").mockReturnValue("valid_token");
     vi.spyOn(userApi, "getProfile").mockResolvedValue({ id: 1, name: "Budi" });
 
@@ -48,7 +52,6 @@ describe("App Routing", () => {
         lostFounds: [],
         lostFoundStats: {},
       },
-      route: "/",
     });
 
     expect(await screen.findByText("Lost & Found")).toBeInTheDocument();
@@ -56,9 +59,10 @@ describe("App Routing", () => {
   });
 
   it("redirects unknown routes to home page", () => {
+    window.history.pushState({}, 'Test page', '/unknown-page');
     vi.spyOn(apiHelper, "getAccessToken").mockReturnValue(null);
 
-    renderWithProviders(<App />, { route: "/unknown-page" });
+    renderWithProviders(<App />);
     expect(screen.getByTestId("login-form")).toBeInTheDocument();
   });
 });

@@ -56,6 +56,9 @@ describe("LostFoundLayout", () => {
     const toggleBtn = screen.getByTestId("toggle-sidebar-btn");
     fireEvent.click(toggleBtn);
 
+    const backdrop = screen.getByTestId("sidebar-backdrop");
+    fireEvent.click(backdrop);
+
     const dropdownBtn = screen.getByTestId("profile-dropdown-button");
     fireEvent.click(dropdownBtn);
 
