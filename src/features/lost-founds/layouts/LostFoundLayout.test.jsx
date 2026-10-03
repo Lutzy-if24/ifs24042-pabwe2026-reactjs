@@ -25,7 +25,7 @@ describe("LostFoundLayout", () => {
     vi.spyOn(apiHelper, "getAccessToken").mockReturnValue(null);
     renderWithProviders(<LostFoundLayout />, { route: "/" });
 
-    expect(screen.getByText("Memuat sesi pengguna...")).toBeInTheDocument();
+    expect(screen.queryByText("Memuat sesi pengguna...")).not.toBeInTheDocument();
   });
 
   it("fetches profile when token is present and renders loading indicator initially", () => {
@@ -79,6 +79,21 @@ describe("LostFoundLayout", () => {
     });
 
     expect(putTokenSpy).toHaveBeenCalledWith("");
+  });
+
+  it("does not clear token when isProfile is true and profile is present", () => {
+    vi.spyOn(apiHelper, "getAccessToken").mockReturnValue("valid_token");
+    const putTokenSpy = vi.spyOn(apiHelper, "putAccessToken");
+
+    renderWithProviders(<LostFoundLayout />, {
+      preloadedState: {
+        profile: { name: "Budi" },
+        isProfile: true,
+      },
+      route: "/",
+    });
+
+    expect(putTokenSpy).not.toHaveBeenCalledWith("");
   });
 
   it("redirects to login when isAuthLogout becomes true", () => {

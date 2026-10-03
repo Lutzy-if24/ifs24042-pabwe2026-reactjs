@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Navigate } from "react-router-dom";
 import apiHelper from "../../../helpers/apiHelper";
 import { asyncSetProfile, setIsProfile } from "../../users/states/action";
 import { asyncSetIsAuthLogout, setIsAuthLogoutActionCreator } from "../../auth/states/action";
@@ -21,11 +21,13 @@ function LostFoundLayout() {
   useEffect(() => {
     const authToken = apiHelper.getAccessToken();
     if (authToken) {
-      dispatch(asyncSetProfile());
+      if (!profile) {
+        dispatch(asyncSetProfile());
+      }
     } else {
       navigate("/auth/login");
     }
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, profile]);
 
   // 2. If profile checking done and profile is missing, clear token and redirect
   useEffect(() => {
@@ -48,6 +50,11 @@ function LostFoundLayout() {
 
   function handleLogout() {
     dispatch(asyncSetIsAuthLogout());
+  }
+
+  const authToken = apiHelper.getAccessToken();
+  if (!authToken) {
+    return <Navigate to="/auth/login" replace />;
   }
 
   if (!profile) {

@@ -66,6 +66,7 @@ export function setIsProfile(isProfile) {
 
 export function asyncSetProfile() {
   return async (dispatch) => {
+    dispatch(setIsProfile(false));
     try {
       const profile = await userApi.getProfile();
       dispatch(setProfileActionCreator(profile));
