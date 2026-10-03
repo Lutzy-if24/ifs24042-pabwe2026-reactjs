@@ -70,7 +70,7 @@ const userApi = (() => {
     const formData = new FormData();
     formData.append("photo", photo, photo.name || "profile.png");
     const response = await apiHelper.fetchData(_url("/me/photo"), {
-      method: "PUT",
+      method: "POST",
       body: formData,
     });
 
@@ -83,7 +83,7 @@ const userApi = (() => {
   }
 
   async function putProfilePassword(password, newPassword, newPasswordConfirmation) {
-    const response = await apiHelper.fetchData(_url("/password"), {
+    let response = await apiHelper.fetchData(_url("/password"), {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -94,6 +94,20 @@ const userApi = (() => {
         new_password_confirmation: newPasswordConfirmation || newPassword,
       }),
     });
+
+    if (response.status === 404) {
+      response = await apiHelper.fetchData(_url("/me/password"), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password,
+          new_password: newPassword,
+          new_password_confirmation: newPasswordConfirmation || newPassword,
+        }),
+      });
+    }
 
     const result = await response.json();
     if (result.status !== "success" && !result.success) {

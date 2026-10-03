@@ -223,6 +223,7 @@ describe("userApi", () => {
   describe("putProfilePassword", () => {
     it("should update password and return message on success", async () => {
       vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
+        status: 200,
         json: async () => ({
           status: "success",
           message: "Berhasil mengubah kata sandi",
@@ -233,8 +234,28 @@ describe("userApi", () => {
       expect(msg).toBe("Berhasil mengubah kata sandi");
     });
 
+    it("should fallback to /users/me/password if /users/password returns 404", async () => {
+      const fetchDataSpy = vi.spyOn(apiHelper, "fetchData")
+        .mockResolvedValueOnce({
+          status: 404,
+          json: async () => ({ status: "fail", message: "Not found" }),
+        })
+        .mockResolvedValueOnce({
+          status: 200,
+          json: async () => ({
+            status: "success",
+            message: "Berhasil mengubah kata sandi lewat fallback",
+          }),
+        });
+
+      const msg = await userApi.putProfilePassword("old123", "new123", "new123");
+      expect(msg).toBe("Berhasil mengubah kata sandi lewat fallback");
+      expect(fetchDataSpy).toHaveBeenCalledTimes(2);
+    });
+
     it("should fallback confirmation to newPassword when confirmation omitted", async () => {
       vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
+        status: 200,
         json: async () => ({
           status: "success",
           message: "Berhasil mengubah kata sandi",
@@ -247,6 +268,7 @@ describe("userApi", () => {
 
     it("should throw error on password change fail", async () => {
       vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
+        status: 200,
         json: async () => ({
           status: "fail",
           message: "Kata sandi lama keliru",
@@ -260,6 +282,7 @@ describe("userApi", () => {
 
     it("should use fallback error message when missing", async () => {
       vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
+        status: 200,
         json: async () => ({
           status: "fail",
         }),

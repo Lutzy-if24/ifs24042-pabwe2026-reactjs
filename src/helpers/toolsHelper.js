@@ -68,3 +68,26 @@ export function formatDate(date) {
     minute: "2-digit",
   });
 }
+
+export function getImageUrl(path, defaultPlaceholder = null) {
+  if (!path) return defaultPlaceholder;
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `https://open-api.delcom.org${cleanPath}`;
+}
+
+export function transformStatsData(statsData) {
+  if (!statsData || typeof statsData !== "object") return [];
+  const losts = statsData.stats_losts || {};
+  const founds = statsData.stats_founds || {};
+  const keys = Array.from(
+    new Set([...Object.keys(losts), ...Object.keys(founds)])
+  );
+  return keys.map((key) => ({
+    label: key,
+    lost: losts[key] ?? 0,
+    found: founds[key] ?? 0,
+  }));
+}

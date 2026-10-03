@@ -6,6 +6,8 @@ import {
   showSuccessDialog,
   showConfirmDialog,
   formatDate,
+  getImageUrl,
+  transformStatsData,
 } from "./toolsHelper";
 
 vi.mock("sweetalert2", () => ({
@@ -84,5 +86,28 @@ describe("toolsHelper", () => {
     const formatted = formatDate("2024-02-26T02:34:26.000000Z");
     expect(formatted).toBeTruthy();
     expect(typeof formatted).toBe("string");
+  });
+
+  it("should resolve image URL correctly with getImageUrl", () => {
+    expect(getImageUrl(null, "placeholder.png")).toBe("placeholder.png");
+    expect(getImageUrl("https://example.com/img.jpg")).toBe("https://example.com/img.jpg");
+    expect(getImageUrl("http://example.com/img.jpg")).toBe("http://example.com/img.jpg");
+    expect(getImageUrl("img/lost-founds/cover.png")).toBe("https://open-api.delcom.org/img/lost-founds/cover.png");
+    expect(getImageUrl("/img/lost-founds/cover.png")).toBe("https://open-api.delcom.org/img/lost-founds/cover.png");
+  });
+
+  it("should transform stats data into rows of label, lost, found", () => {
+    expect(transformStatsData(null)).toEqual([]);
+    expect(transformStatsData("invalid")).toEqual([]);
+    const statsInput = {
+      stats_losts: { "06-10-2024": 3, "07-10-2024": 1 },
+      stats_founds: { "06-10-2024": 2, "08-10-2024": 5 },
+    };
+    const rows = transformStatsData(statsInput);
+    expect(rows).toEqual([
+      { label: "06-10-2024", lost: 3, found: 2 },
+      { label: "07-10-2024", lost: 1, found: 0 },
+      { label: "08-10-2024", lost: 0, found: 5 },
+    ]);
   });
 });

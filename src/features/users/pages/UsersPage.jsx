@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { asyncSetUsers } from "../states/action";
-import { formatDate } from "../../../helpers/toolsHelper";
+import { formatDate, getImageUrl } from "../../../helpers/toolsHelper";
 import {
   IconUsers,
   IconSearch,
@@ -95,7 +95,7 @@ function UsersPage() {
                 <div className="flex items-start gap-3.5">
                   {u.photo ? (
                     <img
-                      src={u.photo}
+                      src={getImageUrl(u.photo)}
                       alt={u.name}
                       className="w-12 h-12 rounded-full object-cover border border-slate-200 shrink-0"
                     />
