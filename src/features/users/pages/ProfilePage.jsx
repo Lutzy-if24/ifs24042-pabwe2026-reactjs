@@ -11,7 +11,6 @@ import {
 import { getImageUrl, showErrorDialog } from "../../../helpers/toolsHelper";
 import {
   IconUser,
-  IconLock,
   IconCamera,
   IconCheck,
   IconLoader2,
@@ -132,7 +131,7 @@ function ProfilePage() {
     return (
       <div className="flex flex-col items-center justify-center py-24">
         <IconLoader2 size={36} className="text-indigo-600 animate-spin mb-2" />
-        <p className="text-sm font-medium text-slate-600">Memuat data profil...</p>
+        <p className="text-sm font-medium text-slate-700">Memuat data profil...</p>
       </div>
     );
   }
@@ -143,7 +142,7 @@ function ProfilePage() {
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           Profil Akun
         </h1>
-        <p className="text-sm text-slate-500 mt-1">
+        <p className="text-sm text-slate-700 mt-1">
           Kelola informasi identitas, foto profil, dan keamanan akun Anda.
         </p>
       </div>
@@ -164,6 +163,7 @@ function ProfilePage() {
           )}
 
           <label
+            htmlFor="profile-photo-file-input"
             data-testid="upload-profile-photo-btn"
             className="absolute bottom-0 right-0 p-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-md cursor-pointer transition-transform hover:scale-105"
             title="Ubah Foto Profil"
@@ -175,9 +175,11 @@ function ProfilePage() {
             )}
             <input
               type="file"
+              id="profile-photo-file-input"
               data-testid="profile-photo-file-input"
               accept="image/*"
               onChange={handlePhotoUpload}
+              aria-label="Unggah foto profil"
               className="hidden"
             />
           </label>
@@ -185,7 +187,7 @@ function ProfilePage() {
 
         <div className="text-center sm:text-left space-y-1">
           <h2 className="text-xl font-bold text-slate-800">{profile.name}</h2>
-          <p className="text-sm text-slate-500">{profile.email}</p>
+          <p className="text-sm text-slate-700">{profile.email}</p>
           <div className="pt-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/60">
               <IconCheck size={14} /> Terverifikasi
@@ -206,11 +208,12 @@ function ProfilePage() {
 
           <form onSubmit={handleUpdateProfile} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+              <label htmlFor="profile-name-input" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Nama Lengkap
               </label>
               <input
                 type="text"
+                id="profile-name-input"
                 data-testid="profile-name-input"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -220,11 +223,12 @@ function ProfilePage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+              <label htmlFor="profile-email-input" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Alamat Email
               </label>
               <input
                 type="email"
+                id="profile-email-input"
                 data-testid="profile-email-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -264,46 +268,49 @@ function ProfilePage() {
 
           <form onSubmit={handleUpdatePassword} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+              <label htmlFor="current-password-input" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Kata Sandi Saat Ini
               </label>
               <input
                 type="password"
+                id="current-password-input"
                 data-testid="current-password-input"
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
                 placeholder="••••••"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+              <label htmlFor="new-password-input" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Kata Sandi Baru
               </label>
               <input
                 type="password"
+                id="new-password-input"
                 data-testid="new-password-input"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Minimal 6 karakter"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+              <label htmlFor="confirm-password-input" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 Ulangi Kata Sandi Baru
               </label>
               <input
                 type="password"
+                id="confirm-password-input"
                 data-testid="confirm-password-input"
                 value={newPasswordConfirmation}
                 onChange={(e) => setNewPasswordConfirmation(e.target.value)}
                 placeholder="Konfirmasi kata sandi"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
                 required
               />
             </div>

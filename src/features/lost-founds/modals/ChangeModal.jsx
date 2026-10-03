@@ -101,13 +101,14 @@ function ChangeModal({ show, onClose, lostFoundId }) {
             <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
               <IconEdit size={18} stroke={2.5} />
             </div>
-            <h3 className="text-base font-bold text-slate-800">Ubah Data Laporan</h3>
+            <h2 className="text-base font-bold text-slate-800">Ubah Data Laporan</h2>
           </div>
           <button
             type="button"
             data-testid="close-edit-modal-btn"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Tutup modal"
+            className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
           >
             <IconX size={18} />
           </button>
@@ -115,10 +116,11 @@ function ChangeModal({ show, onClose, lostFoundId }) {
 
         <form data-testid="edit-form" onSubmit={handleSave} className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="edit-status-select" className="block text-sm font-semibold text-slate-700 mb-1.5">
               Jenis Laporan <span className="text-red-500">*</span>
             </label>
             <select
+              id="edit-status-select"
               data-testid="edit-status-select"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
@@ -131,11 +133,12 @@ function ChangeModal({ show, onClose, lostFoundId }) {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="edit-title-input" className="block text-sm font-semibold text-slate-700 mb-1.5">
               Judul Barang <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
+              id="edit-title-input"
               data-testid="edit-title-input"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -145,10 +148,11 @@ function ChangeModal({ show, onClose, lostFoundId }) {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="edit-completed-select" className="block text-sm font-semibold text-slate-700 mb-1.5">
               Status Penyelesaian (Selesai/Proses)
             </label>
             <select
+              id="edit-completed-select"
               data-testid="edit-completed-select"
               value={isCompleted ? "1" : "0"}
               onChange={(e) => setIsCompleted(e.target.value === "1")}
@@ -160,10 +164,11 @@ function ChangeModal({ show, onClose, lostFoundId }) {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="edit-description-input" className="block text-sm font-semibold text-slate-700 mb-1.5">
               Deskripsi Lengkap <span className="text-red-500">*</span>
             </label>
             <textarea
+              id="edit-description-input"
               data-testid="edit-description-input"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -179,7 +184,7 @@ function ChangeModal({ show, onClose, lostFoundId }) {
               data-testid="cancel-edit-modal-btn"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2.5 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors"
+              className="px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors"
             >
               Batal
             </button>

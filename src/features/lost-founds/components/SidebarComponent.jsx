@@ -38,7 +38,7 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
   ];
 
   return (
-    <>
+    <aside aria-label="Navigasi Samping">
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
         <div
@@ -48,7 +48,7 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
         />
       )}
 
-      <aside
+      <div
         className={`fixed top-16 bottom-0 left-0 z-30 w-64 bg-white border-r border-slate-200/80 p-4 transition-transform duration-200 ease-in-out md:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
@@ -56,10 +56,10 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
         <div className="flex flex-col h-full justify-between">
           <div className="space-y-6">
             <div>
-              <p className="px-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="px-3 text-xs font-bold uppercase tracking-wider text-slate-700">
                 Menu Utama
               </p>
-              <nav className="mt-3 space-y-1">
+              <nav aria-label="Menu Utama" className="mt-3 space-y-1">
                 {navItems.map((item) => {
                   const Icon = item.icon;
 
@@ -74,7 +74,7 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
                         className={`group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                           isHashActive
                             ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/25 font-semibold"
-                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                            : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -83,7 +83,7 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
                             className={
                               isHashActive
                                 ? "text-white"
-                                : "text-slate-400 group-hover:text-slate-600"
+                                : "text-slate-600 group-hover:text-slate-900"
                             }
                           />
                           <span>{item.label}</span>
@@ -103,7 +103,7 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
                         `group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                           isActive && location.hash !== "#statistik"
                             ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/25 font-semibold"
-                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                            : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
                         }`
                       }
                     >
@@ -117,7 +117,7 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
                                 className={
                                   activeState
                                     ? "text-white"
-                                    : "text-slate-400 group-hover:text-slate-600"
+                                    : "text-slate-600 group-hover:text-slate-900"
                                 }
                               />
                               <span>{item.label}</span>
@@ -139,8 +139,8 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
             </p>
           </div>
         </div>
-      </aside>
-    </>
+      </div>
+    </aside>
   );
 }
 

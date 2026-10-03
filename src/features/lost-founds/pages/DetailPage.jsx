@@ -22,7 +22,6 @@ import {
   IconCalendar,
   IconCircleCheck,
   IconClock,
-  IconUser,
   IconAlertCircle,
   IconMapPin,
   IconLoader2,
@@ -67,7 +66,7 @@ function DetailPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <IconLoader2 size={36} className="text-indigo-600 animate-spin mb-2" />
-        <p className="text-sm font-medium text-slate-600">Memuat detail barang...</p>
+        <p className="text-sm font-medium text-slate-700">Memuat detail barang...</p>
       </div>
     );
   }
@@ -90,7 +89,7 @@ function DetailPage() {
         <Link
           to="/"
           data-testid="back-to-home-link"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors"
         >
           <IconArrowLeft size={18} />
           Kembali ke Dashboard
@@ -145,7 +144,7 @@ function DetailPage() {
         <div className="p-6 sm:p-8 space-y-6">
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="font-mono text-xs font-bold text-slate-400">
+              <span className="font-mono text-xs font-bold text-slate-600">
                 #{lostFound.id}
               </span>
 
@@ -193,19 +192,19 @@ function DetailPage() {
                   </div>
                 )}
                 <div>
-                  <p className="text-xs text-slate-400">Dilaporkan Oleh</p>
+                  <p className="text-xs text-slate-600">Dilaporkan Oleh</p>
                   <p className="text-sm font-bold text-slate-800">
                     {lostFound.author?.name || "Pengguna Anonim"}
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
                 <div className="flex items-center gap-1.5">
                   <IconCalendar size={14} className="shrink-0" />
                   <span>
                     Tanggal Lapor:{" "}
-                    <strong className="text-slate-600">
+                    <strong className="text-slate-700">
                       {formatDate(lostFound.created_at)}
                     </strong>
                   </span>
@@ -215,9 +214,9 @@ function DetailPage() {
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700">
               Deskripsi Laporan
-            </h3>
+            </h2>
             <div className="prose max-w-none text-slate-700 bg-slate-50/70 p-6 rounded-2xl border border-slate-100 whitespace-pre-wrap leading-relaxed">
               {lostFound.description || "Tidak ada deskripsi rincian untuk barang ini."}
             </div>

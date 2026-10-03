@@ -87,13 +87,14 @@ function AddModal({ show, onClose }) {
             <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center">
               <IconPlus size={18} stroke={2.5} />
             </div>
-            <h3 className="text-base font-bold text-slate-800">Tambah Laporan Barang</h3>
+            <h2 className="text-base font-bold text-slate-800">Tambah Laporan Barang</h2>
           </div>
           <button
             type="button"
             data-testid="close-add-modal-btn"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            aria-label="Tutup modal"
+            className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
           >
             <IconX size={18} />
           </button>
@@ -101,10 +102,11 @@ function AddModal({ show, onClose }) {
 
         <form data-testid="add-form" onSubmit={handleSave} className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="add-status-select" className="block text-sm font-semibold text-slate-700 mb-1.5">
               Jenis Laporan <span className="text-red-500">*</span>
             </label>
             <select
+              id="add-status-select"
               data-testid="add-status-select"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
@@ -117,31 +119,33 @@ function AddModal({ show, onClose }) {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="add-title-input" className="block text-sm font-semibold text-slate-700 mb-1.5">
               Judul Barang <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
+              id="add-title-input"
               data-testid="add-title-input"
               value={title}
               onChange={changeTitle}
               placeholder="Contoh: Dompet Kulit Hitam"
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="add-description-input" className="block text-sm font-semibold text-slate-700 mb-1.5">
               Deskripsi Lengkap <span className="text-red-500">*</span>
             </label>
             <textarea
+              id="add-description-input"
               data-testid="add-description-input"
               value={description}
               onChange={changeDescription}
               rows={4}
               placeholder="Tuliskan ciri-ciri barang, lokasi hilang/ditemukan, dan info penting lainnya..."
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm resize-none"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all text-sm resize-none"
               required
             />
           </div>
@@ -152,7 +156,7 @@ function AddModal({ show, onClose }) {
               data-testid="cancel-add-modal-btn"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2.5 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors"
+              className="px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors"
             >
               Batal
             </button>

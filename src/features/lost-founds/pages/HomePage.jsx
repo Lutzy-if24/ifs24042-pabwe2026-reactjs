@@ -139,7 +139,7 @@ function HomePage() {
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Daftar Barang Hilang & Ditemukan
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-700 mt-1">
             Laporkan, pantau, dan temukan kembali barang hilang di lingkungan kampus.
           </p>
         </div>
@@ -158,12 +158,12 @@ function HomePage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-700">
               Total Barang
             </p>
-            <h3 className="text-2xl sm:text-3xl font-black text-slate-800 mt-1">
+            <p className="text-2xl sm:text-3xl font-black text-slate-800 mt-1">
               {totalCount}
-            </h3>
+            </p>
           </div>
           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
             <IconChecklist size={24} stroke={2} />
@@ -172,12 +172,12 @@ function HomePage() {
 
         <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-700">
               Barang Hilang
             </p>
-            <h3 className="text-2xl sm:text-3xl font-black text-rose-600 mt-1">
+            <p className="text-2xl sm:text-3xl font-black text-rose-600 mt-1">
               {lostCount}
-            </h3>
+            </p>
           </div>
           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
             <IconAlertCircle size={24} stroke={2} />
@@ -186,12 +186,12 @@ function HomePage() {
 
         <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-700">
               Ditemukan
             </p>
-            <h3 className="text-2xl sm:text-3xl font-black text-amber-600 mt-1">
+            <p className="text-2xl sm:text-3xl font-black text-amber-600 mt-1">
               {foundCount}
-            </h3>
+            </p>
           </div>
           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
             <IconMapPin size={24} stroke={2} />
@@ -200,12 +200,12 @@ function HomePage() {
 
         <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-700">
               Selesai
             </p>
-            <h3 className="text-2xl sm:text-3xl font-black text-emerald-600 mt-1">
+            <p className="text-2xl sm:text-3xl font-black text-emerald-600 mt-1">
               {completedCount}
-            </h3>
+            </p>
           </div>
           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
             <IconCircleCheck size={24} stroke={2} />
@@ -220,28 +220,32 @@ function HomePage() {
           <div className="relative flex-1 max-w-md">
             <IconSearch
               size={18}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600"
             />
             <input
               type="text"
+              id="search-lost-found-input"
               data-testid="search-lost-found-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari judul barang atau deskripsi..."
-              className="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
+              aria-label="Cari laporan"
+              className="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 bg-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
             />
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             {/* Filter Jenis */}
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide flex items-center gap-1">
+              <label htmlFor="status-filter-select" className="text-xs font-semibold text-slate-700 uppercase tracking-wide flex items-center gap-1">
                 <IconFilter size={15} /> Jenis:
-              </span>
+              </label>
               <select
+                id="status-filter-select"
                 data-testid="status-filter-select"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
+                aria-label="Filter jenis laporan"
                 className="px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="">Semua Status</option>
@@ -252,13 +256,15 @@ function HomePage() {
 
             {/* Filter Selesai */}
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+              <label htmlFor="completed-filter-select" className="text-xs font-semibold text-slate-700 uppercase tracking-wide">
                 Kondisi:
-              </span>
+              </label>
               <select
+                id="completed-filter-select"
                 data-testid="completed-filter-select"
                 value={completedFilter}
                 onChange={(e) => setCompletedFilter(e.target.value)}
+                aria-label="Filter kondisi laporan"
                 className="px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="">Semua Kondisi</option>
@@ -286,15 +292,15 @@ function HomePage() {
         {/* Grid Card List */}
         <div className="p-6">
           {loadingItems && filteredItems.length === 0 ? (
-            <div className="py-16 text-center text-slate-400">
+            <div className="py-16 text-center text-slate-600">
               <IconLoader2 size={36} className="mx-auto text-indigo-600 animate-spin mb-2" />
-              <p className="font-medium text-slate-600">Memuat daftar barang...</p>
+              <p className="font-medium text-slate-700">Memuat daftar barang...</p>
             </div>
           ) : filteredItems.length === 0 ? (
-            <div className="py-16 text-center text-slate-400">
-              <IconChecklist size={44} className="mx-auto text-slate-300 mb-2" />
+            <div className="py-16 text-center text-slate-600">
+              <IconChecklist size={44} className="mx-auto text-slate-400 mb-2" />
               <p className="font-semibold text-slate-700">Belum ada barang ditemukan.</p>
-              <p className="text-xs text-slate-400 mt-1">Coba sesuaikan pencarian atau kata kunci filter Anda.</p>
+              <p className="text-xs text-slate-600 mt-1">Coba sesuaikan pencarian atau kata kunci filter Anda.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -316,7 +322,7 @@ function HomePage() {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-tr from-slate-100 to-slate-200 text-slate-400">
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-tr from-slate-100 to-slate-200 text-slate-600">
                             <IconSearch size={32} stroke={1.5} />
                             <span className="text-xs mt-1 font-medium">Tanpa Cover</span>
                           </div>
@@ -325,17 +331,17 @@ function HomePage() {
                         {/* Status badge overlay */}
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
                           {item.status === "lost" ? (
-                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-500 text-white shadow-xs">
+                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-600 text-white shadow-xs">
                               Hilang
                             </span>
                           ) : (
-                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500 text-white shadow-xs">
+                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-600 text-white shadow-xs">
                               Ditemukan
                             </span>
                           )}
 
                           {item.is_completed ? (
-                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500 text-white shadow-xs">
+                            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-600 text-white shadow-xs">
                               Selesai
                             </span>
                           ) : (
@@ -348,7 +354,7 @@ function HomePage() {
 
                       {/* Content details */}
                       <div className="p-5 space-y-3">
-                        <div className="flex items-center justify-between text-xs text-slate-400">
+                        <div className="flex items-center justify-between text-xs text-slate-600">
                           <span className="font-mono font-bold text-indigo-600">#{item.id}</span>
                           <span className="flex items-center gap-1">
                             <IconClock size={13} />
@@ -356,18 +362,18 @@ function HomePage() {
                           </span>
                         </div>
 
-                        <h3 className="font-bold text-slate-900 text-lg line-clamp-1 group-hover:text-indigo-600 transition-colors">
+                        <h2 className="font-bold text-slate-900 text-lg line-clamp-1 group-hover:text-indigo-600 transition-colors">
                           {item.title}
-                        </h3>
+                        </h2>
 
-                        <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">
+                        <p className="text-sm text-slate-700 line-clamp-2 leading-relaxed">
                           {item.description}
                         </p>
 
-                        <div className="pt-2 flex items-center gap-2 text-xs text-slate-500 border-t border-slate-100">
-                          <IconUser size={14} className="text-slate-400 shrink-0" />
+                        <div className="pt-2 flex items-center gap-2 text-xs text-slate-700 border-t border-slate-100">
+                          <IconUser size={14} className="text-slate-600 shrink-0" />
                           <span className="truncate">
-                            Pelapor: <strong className="text-slate-700">{item.author?.name || "Anonim"}</strong>
+                            Pelapor: <strong className="text-slate-800">{item.author?.name || "Anonim"}</strong>
                           </span>
                         </div>
                       </div>
@@ -407,7 +413,7 @@ function HomePage() {
                               setSelectedItemId(item.id);
                               setShowChangeModal(true);
                             }}
-                            className="p-1.5 text-slate-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-700 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
                             title="Ubah"
                           >
                             <IconPencil size={18} />
@@ -416,7 +422,7 @@ function HomePage() {
                             type="button"
                             data-testid={`delete-item-${item.id}`}
                             onClick={() => handleDeleteItem(item.id)}
-                            className="p-1.5 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             title="Hapus"
                           >
                             <IconTrash size={18} />
@@ -441,7 +447,7 @@ function HomePage() {
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-900">Statistik Laporan</h2>
-              <p className="text-xs text-slate-500">Ringkasan statistik barang hilang vs ditemukan.</p>
+              <p className="text-xs text-slate-700">Ringkasan statistik barang hilang vs ditemukan.</p>
             </div>
           </div>
 
@@ -453,7 +459,7 @@ function HomePage() {
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 statsType === "daily"
                   ? "bg-indigo-600 text-white shadow-xs"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
               Harian
@@ -465,7 +471,7 @@ function HomePage() {
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 statsType === "monthly"
                   ? "bg-indigo-600 text-white shadow-xs"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
               Bulanan
@@ -474,13 +480,13 @@ function HomePage() {
         </div>
 
         {statsRows.length === 0 ? (
-          <p className="text-center py-8 text-sm text-slate-400">
+          <p className="text-center py-8 text-sm text-slate-600">
             Belum ada data statistik tersedia.
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-600">
-              <thead className="bg-slate-50 text-xs uppercase tracking-wider font-semibold text-slate-500 border-b border-slate-100">
+            <table className="w-full text-left text-sm text-slate-700">
+              <thead className="bg-slate-50 text-xs uppercase tracking-wider font-semibold text-slate-700 border-b border-slate-100">
                 <tr>
                   <th className="px-4 py-3">Periode</th>
                   <th className="px-4 py-3 text-rose-600">Barang Hilang</th>
