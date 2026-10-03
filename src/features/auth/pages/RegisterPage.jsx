@@ -44,7 +44,7 @@ function RegisterPage() {
   }
 
   return (
-    <form onSubmit={onSubmitHandler} className="space-y-4">
+    <form data-testid="register-form" onSubmit={onSubmitHandler} className="space-y-4">
       <div>
         <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
           Nama Lengkap
