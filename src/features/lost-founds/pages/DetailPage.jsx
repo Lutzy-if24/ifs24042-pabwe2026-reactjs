@@ -64,7 +64,8 @@ function DetailPage() {
 
   if (!profile || !lostFound) {
     return (
-      <div className="flex flex-col items-center justify-center py-20">
+      <div role="status" className="flex flex-col items-center justify-center py-20">
+        <h1 className="sr-only">Memuat detail barang</h1>
         <IconLoader2 size={36} className="text-indigo-600 animate-spin mb-2" />
         <p className="text-sm font-medium text-slate-700">Memuat detail barang...</p>
       </div>

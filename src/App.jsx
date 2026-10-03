@@ -14,10 +14,13 @@ function App() {
   return (
     <Suspense
       fallback={
-        <div className="flex flex-col items-center justify-center py-20 min-h-[300px]">
-          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-2" />
-          <p className="text-sm font-medium text-slate-700">Memuat halaman...</p>
-        </div>
+        <main className="flex flex-col items-center justify-center py-20 min-h-[300px]">
+          <h1 className="sr-only">Memuat halaman</h1>
+          <div role="status" className="flex flex-col items-center">
+            <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-2" />
+            <p className="text-sm font-medium text-slate-700">Memuat halaman...</p>
+          </div>
+        </main>
       }
     >
       <Routes>
