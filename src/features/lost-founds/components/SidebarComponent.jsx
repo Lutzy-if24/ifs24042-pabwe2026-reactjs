@@ -41,10 +41,13 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
     <aside aria-label="Navigasi Samping">
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
-        <div
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-label="Tutup overlay"
           data-testid="sidebar-backdrop"
           onClick={onCloseMobile}
-          className="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-xs md:hidden"
+          className="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-xs md:hidden cursor-default"
         />
       )}
 
